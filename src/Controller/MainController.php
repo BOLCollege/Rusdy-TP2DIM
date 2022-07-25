@@ -45,4 +45,44 @@ class MainController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/update/{id}", name="update")
+     */
+    public function update(Request $request, $id)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash('notice', 'Updated !!');
+
+            return $this->redirectToRoute('main');
+
+        }
+
+        return $this->render('main/update.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/delete/{id}", name="delete")
+     */
+    public function delete($id)
+    {
+        $data = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($data);
+        $em->flush();
+
+        $this->addFlash('notice', 'Deleted !!');
+
+        return $this->redirectToRoute('main');
+    }
 }

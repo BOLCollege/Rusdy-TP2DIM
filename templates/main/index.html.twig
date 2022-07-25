@@ -1,8 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
+{% for message in app.flashes('notice') %}
+            <div class="alert alert-success">
+                {{message}}
+            </div>
+        {% endfor %}
 <div class="container">
 <table class="table">
   <thead>
@@ -22,7 +27,8 @@
         <td>{{data.email}}</td>
         <td>{{data.Telephone}}</td>
         <td>
-        
+          <a class="btn btn-warning" href="{{ path('update', {'id' : data.id})}}">Update</a>
+          <a class="btn btn-danger" href="{{ path('delete', {'id' : data.id})}}">Delete</a>
         </td>
     </tr>
     
@@ -30,5 +36,6 @@
   </tbody>
 
 </table>
+<a class="btn btn-success" href="{{ path('create')}}">Add New User</a>
 </div>
 {% endblock %}
